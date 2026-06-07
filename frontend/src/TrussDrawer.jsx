@@ -185,7 +185,7 @@ const TrussDrawer = () => {
       ctx.strokeStyle = '#276749';
       ctx.fillStyle = '#276749';
       ctx.lineWidth = 2.5;
-      const sc = 0.3;
+      
       const totalF = Math.sqrt(f.fx * f.fx + f.fy * f.fy);
       const arrowLen = 50;
       const ex = totalF > 0 ? px + (f.fx / totalF) * arrowLen : px;
