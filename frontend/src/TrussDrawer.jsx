@@ -305,7 +305,7 @@ const TrussDrawer = () => {
     if (forces.length < 1)   { setError('Add at least 1 force'); return; }
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/analyze', {
+      const response = await axios.post('https://truss-analyzer-production.up.railway.app/api/analyze', {
         nodes, members, forces, supports,
         E: parseFloat(matE) * 1e9,
         A: parseFloat(matA)
