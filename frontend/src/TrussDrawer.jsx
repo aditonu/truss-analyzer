@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-
+import ReactGA from 'react-ga4';
 const TrussDrawer = () => {
   const canvasRef = useRef(null);
   const [nodes, setNodes] = useState([]);
@@ -303,6 +303,15 @@ const TrussDrawer = () => {
     if (members.length < 1)  { setError('Add at least 1 member'); return; }
     if (supports.length < 1) { setError('Add at least 2 supports (pin + roller)'); return; }
     if (forces.length < 1)   { setError('Add at least 1 force'); return; }
+      // ← ADD THESE 6 LINES:
+    ReactGA.event('solve_truss', {
+       event_category: 'truss_analysis',
+       event_label: `nodes_${nodes.length}_members_${members.length}`,
+       nodes: nodes.length,
+       members: members.length,
+       supports: supports.length
+    });
+    
     setLoading(true);
     try {
       const response = await axios.post('https://truss-analyzer-production.up.railway.app/api/analyze', {
@@ -409,6 +418,11 @@ const TrussDrawer = () => {
 
   // ── PDF ───────────────────────────────────────────────────────────────────
   const downloadPDF = () => {
+    ReactGA.event('download_pdf', {
+      event_category: 'report',
+      event_label: 'pdf_download'
+    });
+    
     if (!results) { alert('Solve the truss first!'); return; }
     const pdf = new jsPDF();
     const date = new Date().toLocaleDateString();
